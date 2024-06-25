@@ -1,0 +1,26 @@
+name: pizza_repository
+description: "The repo that handles pizza"
+publish_to:
+version: 0.0.1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+  supabase_flutter: ^2.5.6
+  rxdart: ^0.27.7
+  user_repository:
+    path: ../../packages/user_repository
+
+flutter:
+  uses-material-design: true
