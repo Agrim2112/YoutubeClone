@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:youtubeclone/screens/home/bloc/get_videos_bloc/get_video_bloc.dart';
+import 'package:youtubeclone/screens/home/screens/video_screen.dart';
 
 class HomeTabScreen extends StatelessWidget {
   const HomeTabScreen({super.key});
@@ -76,7 +77,14 @@ class HomeTabScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder:(BuildContext context) =>
+                          VideoScreen(
+                              state.videos[index]
+                          ),
+                      )
+                    );
                   },
                   child: Column(
                     children: [
@@ -155,7 +163,15 @@ class HomeTabScreen extends StatelessWidget {
                                             color: Colors.grey
                                         )
                                     ),
-                                    const SizedBox(width: 12),
+                                    const SizedBox(width: 4),
+                                    const Text(
+                                      '•',
+                                      style: TextStyle(
+                                          fontSize: 8,
+                                          color: Colors.grey
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
                                     Text(
                                       '${formatViews(state.videos[index].views)} views',
                                       style: const TextStyle(
@@ -163,7 +179,15 @@ class HomeTabScreen extends StatelessWidget {
                                           color: Colors.grey
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    const SizedBox(width: 4),
+                                    const Text(
+                                      '•',
+                                      style: TextStyle(
+                                          fontSize: 8,
+                                          color: Colors.grey
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
                                     Text(
                                         formatUploadDate(state.videos[index].uploadDate),
                                         style: const TextStyle(
@@ -196,7 +220,9 @@ class HomeTabScreen extends StatelessWidget {
             );
           }
           else if(state is GetVideoLoading){
-            return const CircularProgressIndicator();
+            return const Center(
+                child: CircularProgressIndicator()
+            );
           }
           else{
             return const Center(
