@@ -19,6 +19,7 @@ class _VideoScreenState extends State<VideoScreen> {
   bool isPlaying = true;
   Duration currentPosition = const Duration(seconds: 0);
   double currentSpeed = 1.0;
+  bool isEnded = false;
 
   @override
   void initState() {
@@ -30,6 +31,15 @@ class _VideoScreenState extends State<VideoScreen> {
       setState(() {
         currentPosition = _controller!.value.position;
       });
+      if(!_controller!.value.isPlaying && _controller!.value.position >= _controller!.value.duration){
+        setState(() {
+          isEnded=true;
+        });
+        print('Video ended');
+      }
+      print(isEnded);
+      print('Current position: ${_controller!.value.position}'); // Add this line
+      print('Duration: ${_controller!.value.duration}'); // Add this line
     });
     super.initState();
   }
@@ -48,6 +58,15 @@ class _VideoScreenState extends State<VideoScreen> {
     final Duration newPosition =
         _controller!.value.position - const Duration(seconds: 5);
     _controller!.seekTo(newPosition);
+  }
+
+
+  replayVideo() {
+    _controller!.seekTo(Duration(seconds: 0));
+    setState(() {
+      isEnded=false;
+    });
+    _controller?.play();
   }
 
   void changePlaybackSpeed(double speed) {
@@ -347,20 +366,24 @@ class _VideoScreenState extends State<VideoScreen> {
                                               padding:
                                                   const EdgeInsets.all(10.0),
                                               child: Icon(
-                                                isPlaying
+                                                isEnded ? CupertinoIcons.arrow_counterclockwise
+                                                :(isPlaying
                                                     ? CupertinoIcons.pause
                                                     : CupertinoIcons
-                                                        .play_arrow_solid,
+                                                        .play_arrow_solid),
                                                 color: Colors.white,
                                                 size: 35,
                                               ),
                                             ),
                                           ),
                                           onPressed: () {
-                                            setState(() {
+                                            isEnded ? replayVideo()
+                                            :setState(() {
                                               isPlaying = (!isPlaying);
                                             });
-                                            toggleVideoPlayer();
+                                            if(!isEnded) {
+                                              toggleVideoPlayer();
+                                            }
                                           },
                                         ),
                                         IconButton(

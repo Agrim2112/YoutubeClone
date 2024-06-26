@@ -34,33 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar:AppBar(
-          backgroundColor: Colors.black,
-          title:Container(
-            height: kToolbarHeight/1.1,
-              child: Image.asset(
-                'assets/appbar_logo.png',
-                fit: BoxFit.contain, // Make the image fill the entire space
-              ),
-          ),
-          actions: [
-            Row(
-              children: [
-                Icon(
-                    CupertinoIcons.bell,
-                  color: Colors.white.withOpacity(0.7),
-                ),
-                SizedBox(width: MediaQuery.sizeOf(context).width/20),
-                Icon(
-                    CupertinoIcons.search,
-                  color: Colors.white.withOpacity(0.7),
-                ),
-                SizedBox(width: MediaQuery.sizeOf(context).width/20),
-              ],
-            ),
 
-          ],
-        ),
         body:_screens[_currentTab],
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black,

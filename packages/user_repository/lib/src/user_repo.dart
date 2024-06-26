@@ -7,6 +7,8 @@ abstract class UserRepository{
 
   Future<void> setUserData(MyUser user);
 
+  Future<MyUser?> getUser();
+
   Future<void> signIn(String email,String password);
 
   Future<void> logOut();

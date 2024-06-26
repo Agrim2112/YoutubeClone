@@ -19,7 +19,6 @@ class SupabaseUserRepo implements UserRepository{
 
     _supabaseClient.auth.onAuthStateChange.listen((data) async {
       final Session? session = data.session;
-      final AuthChangeEvent event = data.event;
 
       if (session == null) {
         controller.add(MyUser.empty);
@@ -41,6 +40,20 @@ class SupabaseUserRepo implements UserRepository{
     });
 
     return controller.stream;
+  }
+
+  Future<MyUser?> getUser() async {
+   final session = _supabaseClient.auth.currentSession;
+   if(session!=null){
+     final response = await _supabaseClient
+         .from('Users')
+         .select()
+         .eq('userId', session.user.id)
+         .limit(1);
+
+     return MyUser.fromEntity(MyUserEntity.fromDocument(response[0]));
+   }
+   return null;
   }
 
   @override

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizza_repository/video_repository.dart';
+import 'package:user_repository/user_repository.dart';
 import 'package:youtubeclone/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:youtubeclone/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:youtubeclone/screens/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:youtubeclone/screens/auth/pages/sign_up_screen.dart';
+import 'package:youtubeclone/screens/home/bloc/get_user_bloc/get_user_bloc.dart';
 import 'package:youtubeclone/screens/home/bloc/get_videos_bloc/get_video_bloc.dart';
 import 'package:youtubeclone/screens/home/screens/home_screen.dart';
 
@@ -30,6 +32,11 @@ class MyAppView extends StatelessWidget {
                     create: (context) => GetVideoBloc(
                         FirebaseVideoRepo()
                     )..add(GetVideo()),
+                  ),
+                  BlocProvider(
+                    create: (context) => GetUserBloc(
+                        SupabaseUserRepo()
+                    )..add(GetUser()),
                   ),
                 ],
                 child: const HomeScreen(),
