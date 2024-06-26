@@ -18,6 +18,7 @@ class _VideoScreenState extends State<VideoScreen> {
   bool showIcons = false;
   bool isPlaying = true;
   Duration currentPosition = const Duration(seconds: 0);
+  double currentSpeed = 1.0;
 
   @override
   void initState() {
@@ -47,6 +48,13 @@ class _VideoScreenState extends State<VideoScreen> {
     final Duration newPosition =
         _controller!.value.position - const Duration(seconds: 5);
     _controller!.seekTo(newPosition);
+  }
+
+  void changePlaybackSpeed(double speed) {
+    setState(() {
+      currentSpeed = speed;
+    });
+    _controller?.setPlaybackSpeed(speed);
   }
 
   String formatDuration(int durationInSeconds) {
@@ -102,6 +110,124 @@ class _VideoScreenState extends State<VideoScreen> {
     } else {
       return '${(difference.inDays / 365).round()} ${(difference.inDays / 365).round()==1? 'year ago' : 'years ago'}';
     }
+  }
+
+  void showSettingsModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.black.withOpacity(0.9),
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: currentSpeed == 0.25 ? Icon(Icons.check, color: Colors.white,) : null,
+                title: Text(
+                  '0.25x',
+                  style: TextStyle(
+                    color: Colors.grey.shade100
+                  ),
+                ),
+                onTap: () {
+                  changePlaybackSpeed(0.25);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 0.5 ? Icon(Icons.check) : null,
+                title: Text('0.5x',
+                    style: TextStyle(
+                    color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(0.5);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 0.75 ? Icon(Icons.check) : null,
+                title: Text(
+                    '0.75x',
+                    style: TextStyle(
+                        color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(0.75);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 1.0 ? Icon(Icons.check) : null,
+                title: Text(
+                    '1.0x',
+                    style: TextStyle(
+                        color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(1.0);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 1.25 ? Icon(Icons.check) : null,
+                title: Text(
+                    '1.25x',
+                    style: TextStyle(
+                        color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(1.25);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 1.5 ? Icon(Icons.check) : null,
+                title: Text(
+                    '1.5x',
+                    style: TextStyle(
+                        color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(1.5);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 1.75 ? Icon(Icons.check) : null,
+                title: Text(
+                    '1.75x',
+                    style: TextStyle(
+                        color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(1.75);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: currentSpeed == 2.0 ? Icon(Icons.check) : null,
+                title: Text(
+                    '2.0x',
+                    style: TextStyle(
+                        color: Colors.grey.shade100
+                    )
+                ),
+                onTap: () {
+                  changePlaybackSpeed(2.0);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -281,7 +407,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  backVideo();
+                                  showSettingsModal(context);
                                 },
                               ),
                             ):const SizedBox(),
