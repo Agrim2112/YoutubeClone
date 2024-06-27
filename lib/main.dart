@@ -14,7 +14,7 @@ void main() async {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rdGZwYmNhY2lhb2tvdmxvZW10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkxNzE0NjIsImV4cCI6MjAzNDc0NzQ2Mn0.thNTI5HT3zS4lwOLjV7TzSpefAYhjvbBCBhGaEkwM4E',
   );
   Bloc.observer= SimpleBlocObserver();
-  runApp(MyApp(SupabaseUserRepo()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false,home: MyApp(SupabaseUserRepo())));
 }
 
 

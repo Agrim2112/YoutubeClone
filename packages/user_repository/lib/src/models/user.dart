@@ -16,7 +16,7 @@ class MyUser{
       userId: '',
       email: '',
       name: '',
-      profilePic: '',
+      profilePic: 'https://oktfpbcaciaokovloemt.supabase.co/storage/v1/object/public/videos/profile/avatar.png?t=2024-06-27T15%3A49%3A35.076Z',
   );
 
   MyUserEntity toEntity() {

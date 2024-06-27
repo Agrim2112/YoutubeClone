@@ -258,6 +258,7 @@ class _VideoScreenState extends State<VideoScreen> {
             height: MediaQuery.of(context).size.height,
             child: _controller!.value.isInitialized
                 ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AspectRatio(
                         aspectRatio: _controller!.value.aspectRatio,
@@ -394,9 +395,9 @@ class _VideoScreenState extends State<VideoScreen> {
                                                 color: Colors.black
                                                     .withOpacity(0.3)),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Image.network(
-                                                widget.videos.Users.profilePic,
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Image.asset(
+                                                'assets/fast.png',
                                                 fit: BoxFit.scaleDown,
                                               ),
                                             ),
@@ -481,7 +482,7 @@ class _VideoScreenState extends State<VideoScreen> {
                             fontSize: 19,
                             fontWeight: FontWeight.w800,
                             color: Colors.grey.shade200,
-                            height: 1.3
+                            height: 1.3,
                           ),
                         ),
                       ),
@@ -523,8 +524,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                 Row(
                                   children: [
                                     CircleAvatar(
-                                      child: Image.asset('assets/avatar.png'),
                                       radius: 18,
+                                      backgroundImage: NetworkImage(widget.videos.Users.profilePic),
                                     ),
                                     const SizedBox(width: 12),
                                     Text(
@@ -572,8 +573,8 @@ class _VideoScreenState extends State<VideoScreen> {
                       )
                     ],
                   )
-                : const Center(
-                    child: CircularProgressIndicator(),
+                : Center(
+                    child: CircularProgressIndicator(color: Colors.grey.shade100,),
                   )),
       ),
     );

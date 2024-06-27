@@ -144,20 +144,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }
             else if(state is GetUserLoading || state is UpdateUserLoading){
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: CircularProgressIndicator(color: Colors.grey.shade100,),
               );
             }
             else{
-              return const Center(
-                child: Text(
+              return const Scaffold(
+                  body: Center(
+                  child: Text(
                   "An error occurred, please try again.",
-                  style: TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400
                   ),
                 ),
-              );
+              ));
             }
           }
       ),

@@ -19,7 +19,7 @@ class HomeTabScreen extends StatelessWidget {
     if(hours>=1)
       return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
     else
-      return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      return '${minutes.toString()}:${seconds.toString().padLeft(2, '0')}';
 
   }
 
@@ -65,6 +65,10 @@ class HomeTabScreen extends StatelessWidget {
     }
   }
 
+  Future<void> refreshHomeTab(BuildContext context) async {
+    context.read<GetVideoBloc>().add(GetVideo());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,156 +103,159 @@ class HomeTabScreen extends StatelessWidget {
       body: BlocBuilder<GetVideoBloc,GetVideoState>(
         builder: (context,state){
           if(state is GetVideoSuccess) {
-            return ListView.builder(
-              itemCount: state.videos.length,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder:(BuildContext context) =>
-                          VideoScreen(
-                              state.videos[index]
-                          ),
-                      )
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                            Image.network(
-                            state.videos[index].thumbnail,
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            height: (9 * MediaQuery
-                                .of(context)
-                                .size
-                                .width) / 16,
-                            fit: BoxFit.contain,
-                          ),
-                          Positioned(
-                            bottom: 6,
-                            right: 6,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(5)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal:4),
-                                child: Text(
-                                  formatDuration(state.videos[index].duration),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600
+            return RefreshIndicator(
+              onRefresh: ()=>refreshHomeTab(context),
+              child: ListView.builder(
+                itemCount: state.videos.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder:(BuildContext context) =>
+                            VideoScreen(
+                                state.videos[index]
+                            ),
+                        )
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                              Image.network(
+                              state.videos[index].thumbnail,
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              height: (9 * MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width) / 16,
+                              fit: BoxFit.contain,
+                            ),
+                            Positioned(
+                              bottom: 6,
+                              right: 6,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.6),
+                                  borderRadius: BorderRadius.circular(5)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal:4),
+                                  child: Text(
+                                    formatDuration(state.videos[index].duration),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ]
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 16),
-                          Expanded(
-                            flex: 1,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(state.videos[index].Users.profilePic),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            flex: 10,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  state.videos[index].title,
-                                  style: const TextStyle(
-                                      height: 1.3,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      color: Colors.white
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                        state.videos[index].Users.name,
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey
-                                        )
-                                    ),
-                                    const SizedBox(width: 4),
-                                    const Text(
-                                      '•',
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: Colors.grey
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      '${formatViews(state.videos[index].views)} views',
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    const Text(
-                                      '•',
-                                      style: TextStyle(
-                                          fontSize: 8,
-                                          color: Colors.grey
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                        formatUploadDate(state.videos[index].uploadDate),
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey
-                                        )
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
+                          ]
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: 16),
+                            Expanded(
                               flex: 1,
-                              child: Icon(
-                                Icons.more_vert,
-                                color: Colors.grey.shade300,
-                                size: 25,
-                              )
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                      ),
-                      const SizedBox(height: 24)
-                    ],
-                  ),
-                );
-              },
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(state.videos[index].Users.profilePic),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              flex: 10,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.videos[index].title,
+                                    style: const TextStyle(
+                                        height: 1.3,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        color: Colors.white
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          state.videos[index].Users.name,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey
+                                          )
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const Text(
+                                        '•',
+                                        style: TextStyle(
+                                            fontSize: 8,
+                                            color: Colors.grey
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${formatViews(state.videos[index].views)} views',
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const Text(
+                                        '•',
+                                        style: TextStyle(
+                                            fontSize: 8,
+                                            color: Colors.grey
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                          formatUploadDate(state.videos[index].uploadDate),
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey
+                                          )
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.more_vert,
+                                  color: Colors.grey.shade300,
+                                  size: 25,
+                                )
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                        ),
+                        const SizedBox(height: 24)
+                      ],
+                    ),
+                  );
+                },
+              ),
             );
           }
           else if(state is GetVideoLoading){
-            return const Center(
-                child: CircularProgressIndicator()
+            return Center(
+                child: CircularProgressIndicator(color: Colors.grey.shade100,)
             );
           }
           else{
