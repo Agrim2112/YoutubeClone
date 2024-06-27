@@ -23,3 +23,11 @@ final class GetUserSuccess extends GetUserState{
   List<Object> get props => [user];
 }
 
+final class UpdateUserFailure extends GetUserState{}
+
+final class UpdateUserLoading extends GetUserState{}
+
+final class UpdateUserSuccess extends GetUserState{}
+
+
+

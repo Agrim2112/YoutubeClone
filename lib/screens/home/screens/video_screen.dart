@@ -394,9 +394,9 @@ class _VideoScreenState extends State<VideoScreen> {
                                                 color: Colors.black
                                                     .withOpacity(0.3)),
                                             child: Padding(
-                                              padding: EdgeInsets.all(10.0),
-                                              child: Image.asset(
-                                                'assets/fast.png',
+                                              padding: const EdgeInsets.all(10.0),
+                                              child: Image.network(
+                                                widget.videos.Users.profilePic,
                                                 fit: BoxFit.scaleDown,
                                               ),
                                             ),

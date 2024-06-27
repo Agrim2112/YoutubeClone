@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pizza_repository/video_repository.dart';
@@ -19,6 +21,20 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
       }
       catch(e){
         emit(GetUserFailure());
+        log(e.toString());
+      }
+    });
+
+    on<UpdateUser>((event,emit) async{
+      emit(UpdateUserLoading());
+      try{
+         await _userRepo.setUserData(event.myUser);
+        emit(UpdateUserSuccess());
+        emit(GetUserSuccess(event.myUser));
+      }
+      catch(e){
+        emit(UpdateUserFailure());
+        log(e.toString());
       }
     });
   }

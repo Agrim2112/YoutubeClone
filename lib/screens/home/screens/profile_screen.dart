@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:youtubeclone/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:youtubeclone/screens/home/bloc/get_user_bloc/get_user_bloc.dart';
 import 'package:youtubeclone/screens/home/screens/items.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -55,13 +59,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         children: [
+                        Stack(
+                        alignment: Alignment.center, // Add this line
+                        children: [
                           CircleAvatar(
                             backgroundColor: Colors.transparent,
                             radius: 45,
-                            child: Image.asset(
-                              'assets/avatar.png',
-                            ),
+                            backgroundImage:(state.user.profilePic.isNotEmpty
+                                ?NetworkImage(state.user.profilePic)
+                                : const AssetImage('assets/avatar.png')
+                            ) as ImageProvider<Object>?
                           ),
+                          IconButton(
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.black.withOpacity(0.3)),
+                              child: Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  color: Colors.grey.shade100,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+                              if(image==null) {
+                              return;
+                              }
+                              final imageBytes= await image.readAsBytes();
+                              final filePath = Uuid().v4();
+                              await Supabase.instance.client.storage.from("videos/profile").uploadBinary(filePath.toString(), imageBytes);
+                              final imageUrl = Supabase.instance.client.storage.from("videos/profile").getPublicUrl(filePath.toString());
+
+                              state.user.profilePic=imageUrl;
+                              if(mounted) {
+                              context.read<GetUserBloc>().add(UpdateUser(state.user));
+                            }
+                            },
+                          )
+                        ],
+                      ),
                           const SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,15 +133,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 10,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: const Items(),
+                    const Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Items(),
+                      ),
                     )
                   ],
                 ),
               );
             }
-            else if(state is GetUserLoading){
+            else if(state is GetUserLoading || state is UpdateUserLoading){
               return const Center(
                 child: CircularProgressIndicator(),
               );

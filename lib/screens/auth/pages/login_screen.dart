@@ -173,6 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ),
                                         SizedBox(height: size.height/7),
+                                        !signInRequired?
                                         SizedBox(
                                           width: MediaQuery.of(context).size.width * 0.5,
                                           child: TextButton(
@@ -208,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               )
                                           ),
 
-                                        ),
+                                        ): CircularProgressIndicator(color: Colors.grey.shade100,),
                                         SizedBox(height: size.height/70),
                                         SizedBox(
                                             width: MediaQuery.of(context).size.width ,

@@ -22,10 +22,18 @@ class _HomeScreenState extends State<HomeScreen> {
   };
 
   void _selectTab(TabItem tabItem) {
-    setState(() {
-      _currentTab = tabItem;
-    });
     if (tabItem == TabItem.add) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text('Upload'),
+          content: Text('Upload action goes here'),
+        ),
+      );
+    } else {
+      setState(() {
+        _currentTab = tabItem;
+      });
     }
   }
 
@@ -34,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-
         body:_screens[_currentTab],
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.black,

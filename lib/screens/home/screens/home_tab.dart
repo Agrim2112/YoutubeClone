@@ -157,11 +157,11 @@ class HomeTabScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(width: 16),
-                          const Expanded(
+                          Expanded(
                             flex: 1,
                             child: CircleAvatar(
                               radius: 20,
-                              backgroundImage: AssetImage('assets/avatar.png'),
+                              backgroundImage: NetworkImage(state.videos[index].Users.profilePic),
                             ),
                           ),
                           const SizedBox(width: 12),
